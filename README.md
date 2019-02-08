@@ -26,7 +26,7 @@ GET: http://localhost:8080/api/receipies
 
 GET : localhost:8080/api/receipe/2
 
-REtrive INgredients Data:
+Retrive Ingredients Data:
 =========================
 GET : http://localhost:8080/api/ingredients
 
