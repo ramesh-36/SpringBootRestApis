@@ -1,4 +1,4 @@
-package com.company.springrest;
+package com.company.spring.entity;
 
 import java.util.Objects;
 
@@ -15,7 +15,7 @@ public class Ingredient {
 	private Integer iid;
 	private String name;
 
-	Integer getIid() {
+	public Integer getIid() {
 		return iid;
 	}
 

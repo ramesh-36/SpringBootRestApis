@@ -1,4 +1,4 @@
-package com.company.springrest;
+package com.company.spring.entity;
 
 import java.util.Objects;
 import java.util.Set;
