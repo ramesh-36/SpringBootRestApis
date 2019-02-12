@@ -11,7 +11,7 @@ public interface ReciepeService {
 
 	public Set<Ingredient> getAllIngredients();
 
-	public Receipe getReciepe(Integer rid);
-
 	public Receipe saveReciepe(Receipe receipe);
+
+	public List<Receipe> getReciepeByIngredients(List<Ingredient> ingredients);
 }

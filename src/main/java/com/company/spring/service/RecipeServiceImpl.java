@@ -3,9 +3,10 @@ package com.company.spring.service;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,19 +18,15 @@ import com.company.spring.entity.Receipe;
 
 @Service
 public class RecipeServiceImpl implements ReciepeService {
-
-	private ReceipeRepository receipeRepository;
-
-	private IngredientRepository ingredientRepository;
-
+	private final static Logger LOGGER = LoggerFactory.getLogger(RecipeServiceImpl.class);
 	@Autowired
-	public RecipeServiceImpl(ReceipeRepository receipeRepository, IngredientRepository ingredientRepository) {
-		this.receipeRepository = receipeRepository;
-		this.ingredientRepository = ingredientRepository;
-	}
+	private ReceipeRepository receipeRepository;
+	@Autowired
+	private IngredientRepository ingredientRepository;
 
 	@Transactional(readOnly = true)
 	public List<Receipe> getAllReciepies() {
+		LOGGER.info("fetching all reciepies");
 		List<Receipe> receipes = new ArrayList<>();
 		receipeRepository.findAll().forEach(r -> receipes.add(r));
 		return receipes;
@@ -37,15 +34,10 @@ public class RecipeServiceImpl implements ReciepeService {
 
 	@Transactional(readOnly = true)
 	public Set<Ingredient> getAllIngredients() {
+		LOGGER.info("fetching all Ingredients");
 		Set<Ingredient> ingredients = new LinkedHashSet<>();
 		ingredientRepository.findAll().forEach(i -> ingredients.add(i));
 		return ingredients;
-	}
-
-	@Transactional(readOnly = true)
-	public Receipe getReciepe(Integer rid) {
-		Optional<Receipe> receipe = receipeRepository.findById(rid);
-		return receipe.get();
 	}
 
 	@Transactional
@@ -56,6 +48,15 @@ public class RecipeServiceImpl implements ReciepeService {
 		receipe2.setThumbnail(receipe.getThumbnail());
 		receipe2.setTitle(receipe.getTitle());
 		receipe2.setIngredients(receipe.getIngredients());
+
+		receipeRepository.save(receipe2);
+		saveIngredient(receipe, receipe2);
+		LOGGER.info("save reciepie data successfully");
+		return receipe2;
+	}
+
+	private void saveIngredient(Receipe receipe, Receipe receipe2) {
+
 		Ingredient ingredient = new Ingredient();
 		for (Ingredient ingredient2 : receipe.getIngredients()) {
 
@@ -63,10 +64,22 @@ public class RecipeServiceImpl implements ReciepeService {
 			ingredient.setName(ingredient2.getName());
 
 			ingredientRepository.save(ingredient);
+			LOGGER.info("save ingredient data successfully");
 		}
+	}
 
-		receipeRepository.save(receipe2);
-		return receipe2;
+	@Transactional(readOnly = true)
+	public List<Receipe> getReciepeByIngredients(List<Ingredient> ingredients) {
+		List<Receipe> receipies = new ArrayList<>();
+
+		for (Receipe reciepe : getAllReciepies()) {
+			for (Ingredient ingredient : ingredients)
+				if (reciepe.getIngredients().contains(ingredient)) {
+					receipies.add(reciepe);
+				}
+		}
+		LOGGER.info("search  reciepie data by given ingreinets");
+		return receipies;
 	}
 
 }
