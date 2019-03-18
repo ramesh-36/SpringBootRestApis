@@ -1,17 +1,20 @@
 package com.company.spring.service;
 
 import java.util.List;
-import java.util.Set;
 
-import com.company.spring.entity.Ingredient;
-import com.company.spring.entity.Receipe;
+import com.company.spring.entity.IngredientsEntity;
+import com.company.spring.entity.ReceipeEntity;
+import com.company.spring.model.Ingredients;
+import com.company.spring.model.Receipe;
+
+
 
 public interface ReciepeService {
-	public List<Receipe> getAllReciepies();
+	public List<ReceipeEntity> getAllReciepies();
 
-	public Set<Ingredient> getAllIngredients();
+	public List<IngredientsEntity> getAllIngredients();
 
-	public Receipe saveReciepe(Receipe receipe);
+	public ReceipeEntity saveReciepe(Receipe receipe);
 
-	public List<Receipe> getReciepeByIngredients(List<Ingredient> ingredients);
+	public List<ReceipeEntity> getReciepeByIngredients(Ingredients ingredient);
 }

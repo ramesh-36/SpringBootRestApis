@@ -1,9 +1,8 @@
 package com.company.spring.service;
 
 import java.util.ArrayList;
-import java.util.LinkedHashSet;
+import java.util.Arrays;
 import java.util.List;
-import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,8 +12,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.company.spring.dao.IngredientRepository;
 import com.company.spring.dao.ReceipeRepository;
-import com.company.spring.entity.Ingredient;
-import com.company.spring.entity.Receipe;
+import com.company.spring.entity.IngredientsEntity;
+import com.company.spring.entity.ReceipeEntity;
+import com.company.spring.model.Ingredients;
+import com.company.spring.model.Receipe;
 
 @Service
 public class RecipeServiceImpl implements ReciepeService {
@@ -25,61 +26,71 @@ public class RecipeServiceImpl implements ReciepeService {
 	private IngredientRepository ingredientRepository;
 
 	@Transactional(readOnly = true)
-	public List<Receipe> getAllReciepies() {
+	public List<ReceipeEntity> getAllReciepies() {
 		LOGGER.info("fetching all reciepies");
-		List<Receipe> receipes = new ArrayList<>();
+		List<ReceipeEntity> receipes = new ArrayList<>();
 		receipeRepository.findAll().forEach(r -> receipes.add(r));
 		return receipes;
 	}
 
 	@Transactional(readOnly = true)
-	public Set<Ingredient> getAllIngredients() {
+	public List<IngredientsEntity> getAllIngredients() {
 		LOGGER.info("fetching all Ingredients");
-		Set<Ingredient> ingredients = new LinkedHashSet<>();
+		List<IngredientsEntity> ingredients = new ArrayList<>();
 		ingredientRepository.findAll().forEach(i -> ingredients.add(i));
 		return ingredients;
 	}
 
 	@Transactional
-	public Receipe saveReciepe(Receipe receipe) {
-		Receipe receipe2 = new Receipe();
+	public ReceipeEntity saveReciepe(Receipe receipe) {
+		ReceipeEntity receipe2 = new ReceipeEntity();
 		receipe2.setHref(receipe.getHref());
-		receipe2.setRid(receipe.getRid());
 		receipe2.setThumbnail(receipe.getThumbnail());
 		receipe2.setTitle(receipe.getTitle());
-		receipe2.setIngredients(receipe.getIngredients());
+		receipe2.setIngredients(Arrays.asList(receipe.getIngredients()));
+		IngredientsEntity ingredientsEntity = new IngredientsEntity();
+		for (String ingredientName : receipe2.getIngredients()) {
+			ingredientsEntity = new IngredientsEntity();
+			ingredientsEntity.setIngredient(ingredientName);
 
-		receipeRepository.save(receipe2);
-		saveIngredient(receipe, receipe2);
+			receipe2.getIngredientsCollection().add(ingredientsEntity);
+		}
+
+		if (!existsByTitle(receipe.getTitle())) {
+			receipe2.setStatus(true);
+			// receipeMOList.add(receipeMO);
+			receipeRepository.save(receipe2);
+		} else {
+			return receipe2;
+		}
+
 		LOGGER.info("save reciepie data successfully");
 		return receipe2;
 	}
 
-	private void saveIngredient(Receipe receipe, Receipe receipe2) {
+	public boolean existsByTitle(String receipeTitle) {
+		LOGGER.info("Find By Title ::: {}", receipeTitle);
 
-		Ingredient ingredient = new Ingredient();
-		for (Ingredient ingredient2 : receipe.getIngredients()) {
+		return receipeRepository.existsByTitle(receipeTitle);
 
-			ingredient.setIid(ingredient2.getIid());
-			ingredient.setName(ingredient2.getName());
-
-			ingredientRepository.save(ingredient);
-			LOGGER.info("save ingredient data successfully");
-		}
 	}
 
 	@Transactional(readOnly = true)
-	public List<Receipe> getReciepeByIngredients(List<Ingredient> ingredients) {
-		List<Receipe> receipies = new ArrayList<>();
+	public List<ReceipeEntity> getReciepeByIngredients(Ingredients ingredient) {
+		List<ReceipeEntity> receipeMOList = new ArrayList<ReceipeEntity>();
 
-		for (Receipe reciepe : getAllReciepies()) {
-			for (Ingredient ingredient : ingredients)
-				if (reciepe.getIngredients().contains(ingredient)) {
-					receipies.add(reciepe);
-				}
+		for (String ingredientName : ingredient.getIngredients()) {
+			LOGGER.debug("Ingredient Name {}", ingredientName);
+
+			List<IngredientsEntity> ingredientsMO = ingredientRepository.findByIngredient(ingredientName);
+			for (IngredientsEntity ingredient1 : ingredientsMO) {
+				receipeMOList.add(ingredient1.getReceipesCollection().get(0));
+			}
 		}
-		LOGGER.info("search  reciepie data by given ingreinets");
-		return receipies;
+
+		LOGGER.debug("Retrieve Receipes by Ingredients return object:: {}", receipeMOList);
+
+		return receipeMOList;
 	}
 
 }
