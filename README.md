@@ -100,9 +100,13 @@ Content-Type: application/json
 RESPONSE: List of Receipes
 
 About Spring Boot
-Spring Boot is an "opinionated" application bootstrapping framework that makes it easy to create new RESTful services (among other types of applications). It provides many of the usual Spring facilities that can be configured easily usually without any XML. In addition to easy set up of Spring Controllers, Spring Data, etc.
+Spring Boot is an "opinionated" application bootstrapping framework that makes it easy to create new RESTful services
+(among other types of applications). It provides many of the usual Spring facilities that can be configured easily
+usually without any XML. In addition to easy set up of Spring Controllers, Spring Data, etc.
 
 To view your H2 in-memory datbase
-To view and query the database you can browse to http://localhost:8080/h2-console. Default username is 'sa' with a blank password. Refer the applicatio.properties for H2 DB file name. Make sure you disable this in your production profiles.
+To view and query the database you can browse to http://localhost:8080/h2-console.
+Default username is 'sa' with a blank password. Refer the applicatio.properties for H2 DB file name. 
+Make sure you disable this in your production profiles.
 
 
