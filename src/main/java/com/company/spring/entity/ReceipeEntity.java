@@ -129,6 +129,63 @@ public class ReceipeEntity {
 	
 		// TODO Auto-generated constructor stub
 	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((href == null) ? 0 : href.hashCode());
+		result = prime * result + (int) (id ^ (id >>> 32));
+		result = prime * result + ((ingredients == null) ? 0 : ingredients.hashCode());
+		result = prime * result + ((ingredientsCollection == null) ? 0 : ingredientsCollection.hashCode());
+		result = prime * result + (status ? 1231 : 1237);
+		result = prime * result + ((thumbnail == null) ? 0 : thumbnail.hashCode());
+		result = prime * result + ((title == null) ? 0 : title.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		ReceipeEntity other = (ReceipeEntity) obj;
+		if (href == null) {
+			if (other.href != null)
+				return false;
+		} else if (!href.equals(other.href))
+			return false;
+		if (id != other.id)
+			return false;
+		if (ingredients == null) {
+			if (other.ingredients != null)
+				return false;
+		} else if (!ingredients.equals(other.ingredients))
+			return false;
+		if (ingredientsCollection == null) {
+			if (other.ingredientsCollection != null)
+				return false;
+		} else if (!ingredientsCollection.equals(other.ingredientsCollection))
+			return false;
+		if (status != other.status)
+			return false;
+		if (thumbnail == null) {
+			if (other.thumbnail != null)
+				return false;
+		} else if (!thumbnail.equals(other.thumbnail))
+			return false;
+		if (title == null) {
+			if (other.title != null)
+				return false;
+		} else if (!title.equals(other.title))
+			return false;
+		return true;
+	}
+	
+	
 	
 	
 }

@@ -14,7 +14,8 @@ public interface ReciepeService {
 
 	public List<IngredientsEntity> getAllIngredients();
 
-	public ReceipeEntity saveReciepe(Receipe receipe);
+	public List<ReceipeEntity> saveReciepe(List<Receipe>receipe);
 
 	public List<ReceipeEntity> getReciepeByIngredients(Ingredients ingredient);
+	public boolean existsByTitle(String receipeTitle);
 }

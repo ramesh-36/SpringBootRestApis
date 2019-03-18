@@ -59,8 +59,8 @@ public class ReceipeController {
 	}
 
 	@PostMapping("/save")
-	public ResponseEntity<ReceipeEntity> saveReceipe(@RequestBody Receipe receipe) {
-		ReceipeEntity receipeData = reciepeService.saveReciepe(receipe);
+	public ResponseEntity<List<ReceipeEntity>> saveReceipe(@RequestBody List<Receipe> receipe) {
+		List<ReceipeEntity> receipeData = reciepeService.saveReciepe(receipe);
 		if (receipeData == null) {
 			throw new ResourceNotFoundException("you are not able to save data");
 		}
