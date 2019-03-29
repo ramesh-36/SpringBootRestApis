@@ -1,4 +1,4 @@
-# SpringBootRestApis(SpringBoot+JPA+H2+Mockito+Maven )- Microservice Project
+# SpringBootRestApis- Project 
 
 This is a sample Java / Maven / Spring Boot (version 2.0.4) application that can be used as a starter for creating a spring boot microservice.
 
